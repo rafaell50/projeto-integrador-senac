@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Notícias</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="/css/style.css">
+        
+    </head>
+    <body>
+        <header>
+            <div th:insert="navbar.html"></div>
+        </header>
+        <main>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="list-group">
+                            <li th:if="${noticias.size() == 0}" class="border border-secondary mb-2 list-group-item">Sem avaliação</li>
+                            <li class="list-group-item border border-secondary mb-2" th:each="noticia : ${noticias}">
+                                <p class="badge rounded-pill bg-secondary" th:text="${noticia.categoria.categoria}"></p>
+                                <h2 class="text-center" th:text="${noticia.titulo}"></h2>
+                                <p th:utext="${noticia.noticia.replaceAll('\n', '<br/>')}"></p>
+                                <a th:href="@{/editar/{id}(id=${noticia.id})}" class="me-2">Editar</a>
+                                <a th:href="@{/deletar/{id}(id=${noticia.id})}">Excluir</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    </body>
+</html>

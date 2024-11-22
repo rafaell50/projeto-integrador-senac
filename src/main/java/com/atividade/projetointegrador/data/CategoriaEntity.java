@@ -1,17 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.atividade.projetointegrador.data;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
  * @author rafael
  */
 public class CategoriaEntity {
-    
-    Integer id;
-    String categoria;
+
+    private Integer id;
+
+    @NotNull(message = "Categoria não pode ser nulo")
+    @NotBlank(message = "Categoria não pode ser vazio")
+    private String categoria;
 
     public Integer getId() {
         return id;
@@ -28,5 +30,5 @@ public class CategoriaEntity {
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
-    
+
 }

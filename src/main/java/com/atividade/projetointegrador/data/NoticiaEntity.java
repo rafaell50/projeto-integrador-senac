@@ -1,10 +1,19 @@
 package com.atividade.projetointegrador.data;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class NoticiaEntity {
     
     Integer id;
+    
+    @NotNull(message = "Categoria não pode ser nulo")
     CategoriaEntity categoria;
+    
+    @NotBlank(message = "Título não pode ser vazio")
     String titulo;
+    
+    @NotBlank(message = "Notícia não pode ser vazio")
     String noticia;
 
     public Integer getId() {

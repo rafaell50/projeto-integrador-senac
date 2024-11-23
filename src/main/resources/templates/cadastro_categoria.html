@@ -21,7 +21,7 @@
                     <form th:action="@{/cadastro_categoria}" method="post">
                         <div>
                             <p>
-                                Título: <input type="text" th:field="${categoria.categoria}" placeholder="Digite a categoria" class="mt-4"/><br/>
+                                Categoria: <input type="text" th:field="${categoria.categoria}" placeholder="Digite a categoria" class="mt-4"/><br/>
                                 <span class="text-danger" th:if="${#fields.hasErrors('categoria.categoria')}" th:errors="${categoria.categoria}"></span>
                             </p>
 

@@ -1,9 +1,11 @@
 package com.atividade.projetointegrador.controller;
 
+import com.atividade.projetointegrador.Service.CategoriaService;
+import com.atividade.projetointegrador.Service.NoticiaService;
 import com.atividade.projetointegrador.data.CategoriaEntity;
 import com.atividade.projetointegrador.data.NoticiaEntity;
-import com.atividade.projetointegrador.data.NoticiasECategorias;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,14 +14,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SiteController {
 
+    @Autowired
+    CategoriaService categoriaService;
+
+    @Autowired
+    NoticiaService noticiaService;
+
     @RequestMapping("/")
     public String index(Model model) {
 
-        model.addAttribute("noticias", NoticiasECategorias.getNoticias());
+        model.addAttribute("noticias", noticiaService.listarTodasNoticias());
         return "index";
     }
 
@@ -39,10 +48,8 @@ public class SiteController {
             return "cadastro_categoria";
         }
 
-        Integer categoriasSize = NoticiasECategorias.getCategorias().size();
-        categoria.setId(categoriasSize + 1);
-        NoticiasECategorias.adicionarCategoria(categoria);
-        model.addAttribute("categorias", NoticiasECategorias.getCategorias());
+        categoriaService.criarCategoria(categoria);
+        model.addAttribute("categorias", categoriaService.listarTodasCategorias());
 
         return "redirect:/";
     }
@@ -51,7 +58,7 @@ public class SiteController {
     public String exibirCadastroNoticia(Model model) {
 
         model.addAttribute("noticia", new NoticiaEntity());
-        model.addAttribute("categorias", NoticiasECategorias.getCategorias());
+        model.addAttribute("categorias", categoriaService.listarTodasCategorias());
         return "cadastro_noticia";
     }
 
@@ -60,7 +67,7 @@ public class SiteController {
 
         if (result.hasErrors()) {
 
-            model.addAttribute("categorias", NoticiasECategorias.getCategorias());
+            model.addAttribute("categorias", categoriaService.listarTodasCategorias());
             return "cadastro_noticia";
         }
 
@@ -69,33 +76,57 @@ public class SiteController {
 
         // Busca a categoria correspondente usando um laço for
         CategoriaEntity categoria = null;
-        for (CategoriaEntity cat : NoticiasECategorias.getCategorias()) {
+        for (CategoriaEntity cat : categoriaService.listarTodasCategorias()) {
             if (cat.getId().equals(categoriaId)) {
                 categoria = cat;
                 break; // Interrompe o laço assim que encontra a categoria
             }
         }
-        
+
         noticia.setCategoria(categoria);
 
-        Integer noticiaSize = NoticiasECategorias.getNoticias().size();
-        noticia.setId(noticiaSize + 1);
-        NoticiasECategorias.adicionarNoticias(noticia);
-        model.addAttribute("noticias", NoticiasECategorias.getCategorias());
-        model.addAttribute("categorias", NoticiasECategorias.getCategorias());
+        noticiaService.criarNoticia(noticia);
+        model.addAttribute("noticias", noticiaService.listarTodasNoticias());
+        model.addAttribute("categorias", categoriaService.listarTodasCategorias());
 
         return "redirect:/";
     }
 
     @GetMapping("/deletar/{id}")
     public String deletarNoticia(@PathVariable(value = "id") Integer id) {
-        NoticiasECategorias.removerNoticia(id);
+        noticiaService.deletarNoticia(id);
         return "redirect:/";
     }
 
     @GetMapping("/editar/{id}")
-    public String editarNoticia(@PathVariable(value = "id") Integer id) {
+    public String editarNoticia(@PathVariable int id, Model model) {
 
+        NoticiaEntity noticia = noticiaService.getNoticiaId(id);
+        CategoriaEntity categoria = categoriaService.getCategoriaId(noticia.getCategoria().getId());
+
+        model.addAttribute("noticia", noticia);
+        model.addAttribute("categorias", categoriaService.listarTodasCategorias());
+
+        return "cadastro_noticia";
+    }
+
+    @PostMapping("/editar_noticia")
+    public String editarNoticia(@Valid @ModelAttribute("noticia") NoticiaEntity noticia, BindingResult result, Model model) {
+
+        
+        if (result.hasErrors()) {
+            model.addAttribute("categorias", categoriaService.listarTodasCategorias());
+            return "cadastro_noticia";
+        }
+
+        
+        noticiaService.editarNoticia(noticia.getId(), noticia);
+
+        
+        model.addAttribute("noticias", noticiaService.listarTodasNoticias());
+        model.addAttribute("categorias", categoriaService.listarTodasCategorias());
+
+        
         return "redirect:/";
     }
 
@@ -103,7 +134,7 @@ public class SiteController {
     public String exibirNoticaCatetoria(Model model) {
 
         model.addAttribute("noticia", new NoticiaEntity());
-        model.addAttribute("categorias", NoticiasECategorias.getCategorias());
+        model.addAttribute("categorias", categoriaService.listarTodasCategorias());
         return "cadastro_noticia";
     }
 

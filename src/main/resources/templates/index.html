@@ -20,9 +20,9 @@
                         <ul class="list-group">
                             <li th:if="${noticias.size() == 0}" class="border border-secondary mb-2 list-group-item">Sem avaliação</li>
                             <li class="list-group-item border border-secondary mb-2" th:each="noticia : ${noticias}">
-                                <p class="badge rounded-pill bg-secondary" th:text="${noticia.categoria.categoria}"></p>
+                                <p class="badge rounded-pill bg-secondary" th:text="${noticia.categoria.nomeCategoria}"></p>
                                 <h2 class="text-center" th:text="${noticia.titulo}"></h2>
-                                <p th:utext="${noticia.noticia.replaceAll('\n', '<br/>')}"></p>
+                                <p th:utext="${noticia.nomeNoticia.replaceAll('\n', '<br/>')}"></p>
                                 <a th:href="@{/editar/{id}(id=${noticia.id})}" class="me-2">Editar</a>
                                 <a th:href="@{/deletar/{id}(id=${noticia.id})}">Excluir</a>
                             </li>

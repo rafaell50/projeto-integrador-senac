@@ -16,15 +16,16 @@
             <div class="container text-center">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h1 class="m-3">Cadastrar notícia</h1>
+                        <h1 class="m-3" th:text="${noticia.id == null} ? 'Cadastrar notícia' : 'Editar notícia'">Cadastrar notícia</h1>
                     </div>
-                    <form th:action="@{/cadastro_noticia}" method="post">
+                    <form th:action="${noticia.id == null ? '/cadastro_noticia' : '/editar_noticia'}" method="post">
+                        <input type="hidden" th:field="${noticia.id}"/>
                         <div>
                             <p>Categoria:
                                 <select th:field="${noticia.categoria.id}">
                                     <option th:each="categoria : ${categorias}" 
                                             th:value="${categoria.id}" 
-                                            th:text="${categoria.categoria}">
+                                            th:text="${categoria.nomeCategoria}">
                                     </option>
                                 </select><br/>
                                 <span class="text-danger" th:if="${#fields.hasErrors('noticia.categoria')}" th:errors="${noticia.categoria}"></span>
@@ -34,11 +35,13 @@
                                 <span class="text-danger" th:if="${#fields.hasErrors('noticia.titulo')}" th:errors="${noticia.titulo}"></span>
                             </p>
                             <p>
-                                Parágrafo <textarea rows="10" cols="50" th:field="${noticia.noticia}" placeholder="Digite a notícia" class="mt-4"></textarea><br/>
-                                <span class="text-danger" th:if="${#fields.hasErrors('noticia.noticia')}" th:errors="${noticia.noticia}"></span>
+                                Parágrafo <textarea rows="10" cols="50" th:field="${noticia.nomeNoticia}" placeholder="Digite a notícia" class="mt-4"></textarea><br/>
+                                <span class="text-danger" th:if="${#fields.hasErrors('noticia.nomeNoticia')}" th:errors="${noticia.nomeNoticia}"></span>
                             </p>
                         </div>
-                        <button type="submit"class="mb-3">Cadastrar</button>
+                        <button type="submit"class="mb-3">
+                            <span th:text="${noticia.id == null ? 'Cadastrar' : 'Editar'}"></span>
+                        </button>
                     </form>
                 </div>
             </div>

@@ -1,51 +1,38 @@
 package com.atividade.projetointegrador.data;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "noticia")
 public class NoticiaEntity {
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
-    
+
     @NotNull(message = "Categoria não pode ser nulo")
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     CategoriaEntity categoria;
-    
+
     @NotBlank(message = "Título não pode ser vazio")
     String titulo;
-    
+
     @NotBlank(message = "Notícia não pode ser vazio")
-    String noticia;
+    String nomeNoticia;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public CategoriaEntity getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(CategoriaEntity categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getNoticia() {
-        return noticia;
-    }
-
-    public void setNoticia(String noticia) {
-        this.noticia = noticia;
-    }
-    
 }

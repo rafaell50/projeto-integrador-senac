@@ -1,34 +1,29 @@
 package com.atividade.projetointegrador.data;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/**
- *
- * @author rafael
- */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "categoria")
 public class CategoriaEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotNull(message = "Categoria não pode ser nulo")
+    
     @NotBlank(message = "Categoria não pode ser vazio")
-    private String categoria;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
+    private String nomeCategoria;
 
 }

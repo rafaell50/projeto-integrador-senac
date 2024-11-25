@@ -5,6 +5,7 @@ import com.atividade.projetointegrador.Service.NoticiaService;
 import com.atividade.projetointegrador.data.CategoriaEntity;
 import com.atividade.projetointegrador.data.NoticiaEntity;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,9 +27,17 @@ public class SiteController {
     NoticiaService noticiaService;
 
     @RequestMapping("/")
-    public String index(Model model) {
+    public String index(@RequestParam(value = "categoriaId", required = false) Integer categoriaId, Model model) {
 
-        model.addAttribute("noticias", noticiaService.listarTodasNoticias());
+        List<NoticiaEntity> noticias;
+        if (categoriaId != null) {
+            noticias = noticiaService.buscarNoticiasPorCategoria(categoriaId); // Método para buscar por categoria
+        } else {
+            noticias = noticiaService.listarTodasNoticias();
+        }
+
+        model.addAttribute("noticias", noticias);
+        model.addAttribute("categorias", categoriaService.listarTodasCategorias());
         return "index";
     }
 
@@ -113,20 +122,16 @@ public class SiteController {
     @PostMapping("/editar_noticia")
     public String editarNoticia(@Valid @ModelAttribute("noticia") NoticiaEntity noticia, BindingResult result, Model model) {
 
-        
         if (result.hasErrors()) {
             model.addAttribute("categorias", categoriaService.listarTodasCategorias());
             return "cadastro_noticia";
         }
 
-        
         noticiaService.editarNoticia(noticia.getId(), noticia);
 
-        
         model.addAttribute("noticias", noticiaService.listarTodasNoticias());
         model.addAttribute("categorias", categoriaService.listarTodasCategorias());
 
-        
         return "redirect:/";
     }
 

@@ -47,7 +47,7 @@ public class NoticiaService {
         noticiaRepository.deleteById(noticiaId);
     }
      
-     public List<NoticiaEntity> buscarAnalises(Integer categoriaId) {
+     public List<NoticiaEntity> buscarNoticiasPorCategoria(Integer categoriaId) {
 
         return noticiaRepository.findByCategoriaId(categoriaId);
     }
